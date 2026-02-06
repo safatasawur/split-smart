@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { inject } from '@angular/core';
+import { AuthService as LoginService } from '../../myservices/auth-service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-login',
   imports: [RouterLink,FormsModule],
@@ -8,11 +11,14 @@ import { RouterLink } from '@angular/router';
   styleUrl: './login.css',
 })
 export class Login {
+  constructor(private router:Router){}
 email=''
 password=''
+loginservice=inject(LoginService)
 
 login(){
-  console.log("Email:" ,this.email);
-console.log("Password:", this.password)
+  
+this.loginservice.loginuser(this.email,this.password)
+this.router.navigate(['/dashboard'])
 }
 }

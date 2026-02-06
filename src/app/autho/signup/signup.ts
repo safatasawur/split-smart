@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { inject } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { AuthService as RegService } from '../../myservices/auth-service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-signup',
   imports: [FormsModule,RouterLink],
@@ -12,6 +13,7 @@ import { AuthService as RegService } from '../../myservices/auth-service';
   styleUrl: './signup.css',
 })
 export class Signup  {
+  constructor(private router:Router){}
 regservice = inject(RegService)
 email=''
 password=''
@@ -19,8 +21,10 @@ register(){
   this.regservice.createuser(this.email,this.password)
   console.log("email:", this.email)
   console.log("password:",this.password)
+  this.regservice.verifyuser()
+  this.router.navigate(['/verifypage'])
 }
- 
+
   
 
 
