@@ -1,18 +1,42 @@
 import { Injectable } from '@angular/core';
-import { Auth ,createUserWithEmailAndPassword } from '@angular/fire/auth';
+import { Auth ,createUserWithEmailAndPassword,User } from '@angular/fire/auth';
 import { signInWithEmailAndPassword } from '@angular/fire/auth'
-import { sendEmailVerification } from 'firebase/auth';
+import { sendEmailVerification } from '@angular/fire/auth';
+import { Firestore ,collection,addDoc,setDoc,serverTimestamp,doc} from '@angular/fire/firestore';
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-    constructor(private auth: Auth) {}
-    async createuser(email: string, password: string) {
-    console.log("Creating user with email:", email, "and password:", password);
-    const credentials=  await createUserWithEmailAndPassword(this.auth, email, password)
-    return credentials
-  }
-  
+    constructor(private auth: Auth, private firestore:Firestore) {}
+  //   async createuser(email: string, password: string,name:string) {
+  //   console.log("Creating user with email:", email, "and password:", password);
+  //   const userCollectionRef = collection(this.firestore, 'users');
+  //   const credentials=  await createUserWithEmailAndPassword(this.auth, email, password)
+  //   await addDoc(userCollectionRef, { email: email, uid: credentials.user.uid,name:name });
+  //   return credentials
+  // }
+  async createuser(email: string, password: string, name: string) {
+  const cred = await createUserWithEmailAndPassword(
+    this.auth,
+    email,
+    password
+  );
+
+  const user = cred.user;
+  if (!user) throw new Error('No user');
+
+  await setDoc(
+    doc(this.firestore, 'users', user.uid),
+    {
+      name,
+      email: user.email,
+      createdAt: serverTimestamp(),
+    }
+  );
+
+  return cred;
+}
   
   async loginuser(email: string, password: string) {
         

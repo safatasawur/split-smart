@@ -17,12 +17,27 @@ export class Signup  {
 regservice = inject(RegService)
 email=''
 password=''
-register(){
-  this.regservice.createuser(this.email,this.password)
-  console.log("email:", this.email)
-  console.log("password:",this.password)
-  this.regservice.verifyuser()
-  this.router.navigate(['/verifypage'])
+name =''
+async register(){
+
+  try {
+    await this.regservice.createuser(
+      this.email,
+      this.password,
+      this.name
+    );
+
+    await this.regservice.verifyuser();
+
+    await this.router.navigate(['/verifypage']);
+
+  } catch (error) {
+    console.error('Signup failed:', error);
+  }
+
+
+  
+  
 }
 
   

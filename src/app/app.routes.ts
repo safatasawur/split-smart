@@ -33,5 +33,10 @@ export const routes: Routes = [
         loadComponent:()=>{
             return import('./autho/login/login').then((m)=>m.Login)
         }
+    },
+    {path:'creategroup',
+    loadComponent:()=>{
+        return import('./autho/groupform/groupform').then((m)=>m.Groupform)
+        }
     }
 ];
