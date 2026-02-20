@@ -1,13 +1,13 @@
 <h2>Create Group</h2><br>
-<form (ngSubmit)="onSubmit()">
+<form (ngSubmit)="onSubmit()" #groupForm="ngForm">
  
     <input type="text" name="groupName" id="groupName" placeholder="Group Name" [(ngModel)]="groupName">
     <br><input type="text" name="description" id="description" placeholder="Description" [(ngModel)]="description">
       <div class="members">
 
       <h4>Add members</h4>
-          <input type="email" name="email" id="email" placeholder=" Enter email to add member" [(ngModel)]="memberEmail">
-    <button (click)="addMember()">Add member</button>
+          <input type="email" name="memberemail" id="memberemail" placeholder=" Enter email to add member" [(ngModel)]="memberEmail">
+    <button (click)="addMember(groupForm)" type="button">Add member</button>
        </div>
        
     @if (memberError) {

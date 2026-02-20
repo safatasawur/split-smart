@@ -4,6 +4,7 @@ import { inject } from '@angular/core';
 import { GroupService } from '../../myservices/group-service';
 import {Auth } from '@angular/fire/auth';
 import { UserServices } from '../../myservices/user-services';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-groupform',
   imports: [FormsModule],
@@ -12,8 +13,9 @@ import { UserServices } from '../../myservices/user-services';
   standalone: true
 })
 export class Groupform {
+
   userService = inject(UserServices);
-  constructor(private auth:Auth) {}
+  constructor(private auth:Auth,private router:Router) {}
   groupService = inject(GroupService);
 groupName=''
 description=''
@@ -21,7 +23,7 @@ memberEmail=''
 memberError=''
 members: string[] = [];
 
-async addMember(){
+async addMember(form:any){
   this.memberError=''
   if(!this.memberEmail)return
   const snapshot = await this.userService.getUserByEmail(this.memberEmail)
@@ -36,9 +38,13 @@ async addMember(){
     this.memberError='User already added'
     return
   }
-  this.members.push(this.memberEmail)
-  this.memberEmail=''
-  console.log('add member clicked')
+  this.members.push(userId)
+ 
+  console.log('add member clicked',this.memberEmail)
+   this.memberEmail=''
+   form.controls['memberemail'].reset()
+   console.log('Members:', this.members)
+   console.log("hi",this.memberEmail)
 }
 // removeMember(index: number){
 //   this.members.splice(index,1)
@@ -52,6 +58,6 @@ async onSubmit(){
     return;
   }
  await  this.groupService.createGroup(this.groupName,user.uid,[user.uid,...this.members],this.description)
- 
+   this.router.navigate(['/dashboard'])
 }
 }
